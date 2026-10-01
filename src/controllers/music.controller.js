@@ -39,7 +39,11 @@ async function createAlbum(req, res) {
 }
 
 async function getAllMusics(req, res) {
-  const musics = await musicModel.find().populate("artist", "username email");
+  const musics = await musicModel
+    .find()
+    .skip(1)
+    .limit(10)
+    .populate("artist", "username email");
   // .populate(param1, param2) => para1 is the field to populate and para2 is the fields to select from the populated document, if only param1 is provided then all fields will be selected from the populated document
 
   res.status(200).json({
@@ -69,10 +73,10 @@ async function getAlbumById(req, res) {
     .populate("artist", "username email")
     .populate("musics");
 
-    res.status(200).json({
-      message: "Album fetched successfully",
-      album: album,
-    });
+  res.status(200).json({
+    message: "Album fetched successfully",
+    album: album,
+  });
 }
 
 module.exports = {

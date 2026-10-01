@@ -28,28 +28,26 @@ async function authArtist(req, res, next) {
   }
 }
 
-async function authUser(req, res, next){
+async function authUser(req, res, next) {
   const token = req.cookies.token;
 
   if (!token) {
     return res.status(401).json({ message: "Unauthorized" });
   }
 
-  try{
+  try {
     const decoded = jwt.verify(token, process.env.JWT_SECRET);
-    
-    if(decoded.role !== "user"){
+
+    if (decoded.role !== "user") {
       return res.status(403).json({ message: "Forbidden" });
     }
 
     req.user = decoded; // Attach the decoded user information to the request object
 
     next();
-
-  }catch (err) {
+  } catch (err) {
     return res.status(401).json({ message: "Unauthorized" });
   }
-
 }
 
 module.exports = { authArtist, authUser };
